@@ -142,6 +142,7 @@ public:
   DEF_VALUE(double,Double,Goal_Depth)
   DEF_VALUE(double,Double,Goal_Width)
   DEF_VALUE(double,Double,Goal_Height)
+  DEF_VALUE(double,Double,overlap)
   DEF_ENUM(std::string,YellowTeam)
   DEF_ENUM(std::string,BlueTeam)
   DEF_VALUE(double,Double,BallRadius)

@@ -52,8 +52,8 @@ ConfigWidget::ConfigWidget()
     VarListPtr field_vars(new VarList("Field"));
     geo_vars->addChild(field_vars);
         ADD_VALUE(field_vars,Double,Field_Line_Width,0.010,"Line Thickness")
-        ADD_VALUE(field_vars,Double,Field_Length,9.000,"Length")
-        ADD_VALUE(field_vars,Double,Field_Width,6.000,"Width")
+        ADD_VALUE(field_vars,Double,Field_Length,12.000,"Length")
+        ADD_VALUE(field_vars,Double,Field_Width,9.000,"Width")
         ADD_VALUE(field_vars,Double,Field_Rad,0.500,"Radius")
         ADD_VALUE(field_vars,Double,Field_Free_Kick,0.700,"Free Kick Distanse From Defense Area")
         ADD_VALUE(field_vars,Double,Field_Penalty_Width,2.40,"Penalty width")
@@ -66,6 +66,7 @@ ConfigWidget::ConfigWidget()
         ADD_VALUE(field_vars,Double,Goal_Depth,0.200,"Goal depth")
         ADD_VALUE(field_vars,Double,Goal_Width,1.200,"Goal width")
         ADD_VALUE(field_vars,Double,Goal_Height,0.160,"Goal height")
+        ADD_VALUE(field_vars,Double,overlap,0.20,"Camera Overlap")
     ADD_ENUM(StringEnum,YellowTeam,"Parsian","Yellow Team");
     END_ENUM(geo_vars,YellowTeam)
     ADD_ENUM(StringEnum,BlueTeam,"Parsian","Blue Team");

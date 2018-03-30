@@ -602,24 +602,18 @@ dReal normalizeAngle(dReal a)
 
 bool SSLWorld::visibleInCam(int id, double x, double y)
 {
-    id %= 4;
-    if (id==0)
-    {
-        if (x>-0.2 && y>-0.2) return true;
+    id %= 8;
+    switch (id) {
+        case 0: return (x < -cfg->Field_Length()/4 + cfg->overlap() && y < cfg->overlap());
+        case 1: return (x < -cfg->Field_Length()/4 + cfg->overlap() && y > -cfg->overlap());
+        case 2: return (x < cfg->overlap() && x > -cfg->Field_Length()/4 - cfg->overlap() && y < cfg->overlap());
+        case 3: return (x < cfg->overlap() && x > -cfg->Field_Length()/4 - cfg->overlap() && y > -cfg->overlap());
+        case 4: return (x < cfg->Field_Length()/4 + cfg->overlap() && x > -cfg->overlap() && y < cfg->overlap());
+        case 5: return (x < cfg->Field_Length()/4 + cfg->overlap() && x > -cfg->overlap() && y > -cfg->overlap());
+        case 6: return (x > cfg->Field_Length()/4 - cfg->overlap() && y < cfg->overlap());
+        case 7: return (x > cfg->Field_Length()/4 - cfg->overlap() && y > -cfg->overlap());
+        default: return false;
     }
-    if (id==1)
-    {
-        if (x>-0.2 && y<0.2) return true;
-    }
-    if (id==2)
-    {
-        if (x<0.2 && y<0.2) return true;
-    }
-    if (id==3)
-    {
-        if (x<0.2 && y>-0.2) return true;
-    }
-    return false;
 }
 
 #define CONVUNIT(x) ((int)(1000*(x)))
@@ -642,19 +636,6 @@ SSL_WrapperPacket* SSLWorld::generatePacket(int cam_id)
         SSL_GeometryFieldSize* field = geom->mutable_field();
 
 
-        // Old protocol
-//        field->set_line_width(CONVUNIT(cfg->Field_Line_Width()));
-//        field->set_referee_width(CONVUNIT(cfg->Field_Referee_Margin()));
-//        field->set_goal_wall_width(CONVUNIT(cfg->Goal_Thickness()));
-//        field->set_center_circle_radius(CONVUNIT(cfg->Field_Rad()));
-//        field->set_defense_radius(CONVUNIT(cfg->Field_Defense_Rad()));
-//        field->set_defense_stretch(CONVUNIT(cfg->Field_Defense_Stretch()));
-//        field->set_free_kick_from_defense_dist(CONVUNIT(cfg->Field_Free_Kick()));
-        //TODO: verify if these fields are correct:
-//        field->set_penalty_line_from_spot_dist(CONVUNIT(cfg->Field_Penalty_Line()));
-//        field->set_penalty_spot_from_field_line_dist(CONVUNIT(cfg->Field_Penalty_Point()));
-
-        // Current protocol (2015+)
         // Field general info
         field->set_field_length(CONVUNIT(cfg->Field_Length()));
         field->set_field_width(CONVUNIT(cfg->Field_Width()));
@@ -666,8 +647,8 @@ SSL_WrapperPacket* SSLWorld::generatePacket(int cam_id)
         addFieldLinesArcs(field);
 
     }
-    if (cfg->noise()==false) {dev_x = 0;dev_y = 0;dev_a = 0;}
-    if ((cfg->vanishing()==false) || (rand0_1() > cfg->ball_vanishing()))
+    if (!cfg->noise()) { dev_x = 0;dev_y = 0;dev_a = 0;}
+    if (!cfg->vanishing() || (rand0_1() > cfg->ball_vanishing()))
     {
         if (visibleInCam(cam_id, x, y)) {
             SSL_DetectionBall* vball = packet->mutable_detection()->add_balls();
@@ -680,7 +661,7 @@ SSL_WrapperPacket* SSLWorld::generatePacket(int cam_id)
         }
     }
     for(int i = 0; i < ROBOT_COUNT; i++){
-        if ((cfg->vanishing()==false) || (rand0_1() > cfg->blue_team_vanishing()))
+        if (!cfg->vanishing() || (rand0_1() > cfg->blue_team_vanishing()))
         {
             if (!robots[i]->on) continue;
             robots[i]->getXY(x,y);
@@ -698,7 +679,7 @@ SSL_WrapperPacket* SSLWorld::generatePacket(int cam_id)
         }
     }
     for(int i = ROBOT_COUNT; i < ROBOT_COUNT*2; i++){
-        if ((cfg->vanishing()==false) || (rand0_1() > cfg->yellow_team_vanishing()))
+        if (!cfg->vanishing() || (rand0_1() > cfg->yellow_team_vanishing()))
         {
             if (!robots[i]->on) continue;
             robots[i]->getXY(x,y);
@@ -804,6 +785,10 @@ void SSLWorld::sendVisionBuffer()
     sendQueue.push_back(new SendingPacket(generatePacket(1),t+1));
     sendQueue.push_back(new SendingPacket(generatePacket(2),t+2));
     sendQueue.push_back(new SendingPacket(generatePacket(3),t+3));
+    sendQueue.push_back(new SendingPacket(generatePacket(4),t));
+    sendQueue.push_back(new SendingPacket(generatePacket(5),t+1));
+    sendQueue.push_back(new SendingPacket(generatePacket(6),t+2));
+    sendQueue.push_back(new SendingPacket(generatePacket(7),t+3));
     while (t - sendQueue.front()->t>=cfg->sendDelay())
     {
         SSL_WrapperPacket *packet = sendQueue.front()->packet;
