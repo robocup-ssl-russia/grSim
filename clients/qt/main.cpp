@@ -1,4 +1,8 @@
-#include <QtGui/QApplication>
+#ifndef QT5
+    #include <QtGui/QApplication>
+#else
+    #include <QtWidgets/QApplication>
+#endif
 #include "mainwindow.h"
 
 int main(int argc, char *argv[])

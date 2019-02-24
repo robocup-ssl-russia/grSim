@@ -1,8 +1,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QtGui/QMainWindow>
-#include <QtGui/QDialog>
+#ifndef QT5
+    #include <QtGui/QMainWindow>
+    #include <QtGui/QDialog>
+#else
+    #include <QtWidgets/QMainWindow>
+    #include <QtWidgets/QDialog>
+#endif
 #include <QLineEdit>
 #include <QLabel>
 #include <QTimer>
