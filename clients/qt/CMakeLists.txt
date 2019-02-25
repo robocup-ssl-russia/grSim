@@ -64,8 +64,8 @@ add_executable(${app} MACOSX_BUNDLE
     mainwindow.h
 )
 if(USE_QT5)
-    target_link_libraries(${app} ${libs} Qt5::Widgets Qt5::Network)
+    target_link_libraries(${app} ${libs} Qt5::Core Qt5::Widgets Qt5::Network)
 else()
-    target_link_libraries(${app} ${libs} Qt5::Widgets Qt5::Network)
+    target_link_libraries(${app} ${libs} )
 endif()
 
