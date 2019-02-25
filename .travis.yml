@@ -19,6 +19,7 @@ addons:
     packages:
       - cmake
       - qt5-default
+      - libqt5opengl5-dev
       - libgl1-mesa-dev
       - libglu1-mesa-dev
       - libprotobuf-dev 
