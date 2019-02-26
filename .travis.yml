@@ -29,6 +29,9 @@ addons:
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update > /dev/null                   ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew tap cartr/qt4                        ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew tap-pin cartr/qt4                    ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install qt@4                         ; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install qt5                          ; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew uninstall --ignore-dependencies python ; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install protobuf                     ; fi
