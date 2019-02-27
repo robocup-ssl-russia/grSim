@@ -23,7 +23,7 @@ init:
   - pacman --noconfirm -Sy make
   
 build_script:
-  - git clone https://bitbucket.org/odedevs/ode ode
+  - hg clone https://bitbucket.org/odedevs/ode ode
   - cd ode
   - mkdir build-cmake && cd build-cmake
   - ../configure --enable-double-precision
