@@ -19,7 +19,7 @@ init:
   - set PATH=%MSYS_DIR%\usr\bin
   - pacman --noconfirm -Su mingw%bit%/mingw-w64-%platform_name%-protobuf
   - pacman --noconfirm -Su mingw%bit%/mingw-w64-%platform_name%-cmake
-  - pacman --noconfirm -Su mingw-w64-i686-boost (для x86) pacman -Su mingw-w64-x86_64-boost
+  - pacman --noconfirm -Su mingw-w64-%platform_name%-boost
   - pacman --noconfirm -Sy make
   
 build_script:
