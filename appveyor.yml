@@ -21,16 +21,16 @@ init:
   - pacman --noconfirm -Su mingw%bit%/mingw-w64-%platform_name%-cmake
   - pacman --noconfirm -Su mingw-w64-%platform_name%-boost
   - pacman --noconfirm -Sy make
+  - hg clone https://bitbucket.org/odedevs/ode ode
+  - git clone https://github.com/DmiitriyJarosh/vartypes.git vartypes_dir
   
 build_script:
-  - hg clone https://bitbucket.org/odedevs/ode ode
   - cd ode
   - mkdir build-cmake && cd build-cmake
   - ../configure --enable-double-precision
   - make
   - make install
   - cd ..
-  - git clone https://github.com/DmiitriyJarosh/vartypes.git vartypes_dir
   - set PATH=%MSYS_DIR%\mingw%bit%\bin;%QT_MinGW_DIR%\bin
   - cd vartypes_dir
   - mkdir build-cmake && cd build-cmake
