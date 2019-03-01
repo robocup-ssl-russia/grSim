@@ -16,13 +16,13 @@ environment:
         
 
 init:
+  - hg clone https://bitbucket.org/odedevs/ode ode
+  - git clone https://github.com/DmiitriyJarosh/vartypes.git vartypes_dir
   - set PATH=%MSYS_DIR%\usr\bin
   - pacman --noconfirm -Su mingw%bit%/mingw-w64-%platform_name%-protobuf
   - pacman --noconfirm -Su mingw%bit%/mingw-w64-%platform_name%-cmake
   - pacman --noconfirm -Su mingw-w64-%platform_name%-boost
   - pacman --noconfirm -Sy make
-  - hg clone https://bitbucket.org/odedevs/ode ode
-  - git clone https://github.com/DmiitriyJarosh/vartypes.git vartypes_dir
   
 build_script:
   - cd ode
