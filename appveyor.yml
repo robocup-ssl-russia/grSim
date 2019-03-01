@@ -27,7 +27,7 @@ init:
 build_script:
   - cd ode
   #- mkdir build-cmake && cd build-cmake
-  - ./configure --enable-double-precision
+  - configure --enable-double-precision
   - make
   - make install
   - cd ..
