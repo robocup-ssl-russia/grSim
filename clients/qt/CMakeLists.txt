@@ -66,6 +66,9 @@ add_executable(${app} MACOSX_BUNDLE
 if(USE_QT5)
     target_link_libraries(${app} ${libs} Qt5::Core Qt5::Widgets Qt5::Network)
 else()
+    if(USE_QT5)
+        qt5_use_modules(${app} Widgets Network Core OpenGL)
+    endif()
     target_link_libraries(${app} ${libs} )
 endif()
 
