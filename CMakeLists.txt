@@ -118,7 +118,6 @@ option(DOUBLE_PRECISION "Use double precision? If not single precision will be u
 find_package(VarTypes REQUIRED)
 include_directories(${VARTYPES_INCLUDE_DIRS})
 list(APPEND libs ${VARTYPES_LIBRARIES})
-
 # Protobuf
 find_package(Protobuf REQUIRED)
 include_directories(${PROTOBUF_INCLUDE_DIRS})
@@ -285,5 +284,50 @@ else()
     set(CPACK_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME_LOWER}_${CPACK_PACKAGE_VERSION}_${ARCH}")
 endif()
 include(CPack)
+
+set(COPY_ENABLE_FLAG 0)
+if(WIN32)
+    string(REPLACE "/g++.exe" "" RES ${CMAKE_CXX_COMPILER})
+
+    if(COPY_ENABLE_FLAG)
+        set(DLL_LIB_LIST ${RES}/zlib1.dll
+                ${RES}/libbz2-1.dll
+                ${RES}/libfreetype-6.dll
+                ${RES}/libgcc_s_seh-1.dll
+                ${RES}/libglib-2.0-0.dll
+                ${RES}/libgraphite2.dll
+                ${RES}/libharfbuzz-0.dll
+                ${RES}/libiconv-2.dll
+                ${RES}/libicudt61.dll
+                ${RES}/libicuin61.dll
+                ${RES}/libicuuc61.dll
+                ${RES}/libintl-8.dll
+                ${RES}/libpcre-1.dll
+                ${RES}/libpcre2-16-0.dll
+                ${RES}/libpng16-16.dll
+                ${RES}/libprotobuf.dll
+                ${RES}/libstdc++-6.dll
+                ${VARTYPES_LIBRARIES}
+                ${RES}/libwinpthread-1.dll)
+        set(QT5_DEBUG_DLL ${RES}/Qt5Cored.dll
+                ${RES}/Qt5Guid.dll
+                ${RES}/Qt5Networkd.dll
+                ${RES}/Qt5OpenGLd.dll
+                ${RES}/Qt5Widgetsd.dll)
+        set(QT5_RELEASE_DLL ${RES}/Qt5Core.dll
+                ${RES}/Qt5Gui.dll
+                ${RES}/Qt5OpenGL.dll
+                ${RES}/Qt5Network.dll
+                ${RES}/Qt5Widgets.dll)
+        if(CMAKE_BUILD_TYPE STREQUAL Debug)
+            list(APPEND DLL_LIB_LIST ${QT5_DEBUG_DLL})
+        endif()
+        if(CMAKE_BUILD_TYPE STREQUAL Release)
+            list(APPEND DLL_LIB_LIST ${QT5_RELEASE_DLL})
+        endif()
+
+        file(COPY ${DLL_LIB_LIST} DESTINATION ../bin)
+    endif()
+endif()
 
 
