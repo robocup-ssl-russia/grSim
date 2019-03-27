@@ -286,6 +286,7 @@ endif()
 include(CPack)
 
 set(COPY_ENABLE_FLAG 0)
+set(CXX_BIT 64)
 if(WIN32)
     string(REPLACE "/g++.exe" "" RES ${CMAKE_CXX_COMPILER})
 
@@ -293,7 +294,6 @@ if(WIN32)
         set(DLL_LIB_LIST ${RES}/zlib1.dll
                 ${RES}/libbz2-1.dll
                 ${RES}/libfreetype-6.dll
-                ${RES}/libgcc_s_seh-1.dll
                 ${RES}/libglib-2.0-0.dll
                 ${RES}/libgraphite2.dll
                 ${RES}/libharfbuzz-0.dll
@@ -321,6 +321,11 @@ if(WIN32)
                 ${RES}/Qt5Widgets.dll)
         if(CMAKE_BUILD_TYPE STREQUAL Debug)
             list(APPEND DLL_LIB_LIST ${QT5_DEBUG_DLL})
+        endif()
+        if (CXX_BIT STREQUAL 64)
+            list(APPEND DLL_LIB_LIST ${RES}/libgcc_s_seh-1.dll)
+        else()
+            list(APPEND DLL_LIB_LIST ${RES}/libgcc_s_dw2-1.dll)
         endif()
         if(CMAKE_BUILD_TYPE STREQUAL Release)
             list(APPEND DLL_LIB_LIST ${QT5_RELEASE_DLL})
