@@ -118,6 +118,7 @@ option(DOUBLE_PRECISION "Use double precision? If not single precision will be u
 find_package(VarTypes REQUIRED)
 include_directories(${VARTYPES_INCLUDE_DIRS})
 list(APPEND libs ${VARTYPES_LIBRARIES})
+
 # Protobuf
 find_package(Protobuf REQUIRED)
 include_directories(${PROTOBUF_INCLUDE_DIRS})
