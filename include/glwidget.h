@@ -18,6 +18,7 @@ Copyright (C) 2011, Parsian Robotic Center (eew.aut.ac.ir/~parsian/grsim)
 
 #ifndef GLWIDGET_H
 #define GLWIDGET_H
+
 #include <QGLWidget>
 #include <QGraphicsView>
 #include <QTime>
