@@ -10,6 +10,7 @@ grSim-[![Build Status](https://travis-ci.org/RoboCup-SSL/grSim.svg?branch=master
 - [Authors](AUTHORS.md)
 - [Changelog](CHANGELOG.md)
 - License: [GNU General Public License (GPLv3)](LICENSE.md)
+- Binaries for downloading: https://drive.google.com/file/d/1VzoN7PxS9FJt7twUqq9etVc3qE9ntwjd/view
 
 System Requirements
 -----------------------
