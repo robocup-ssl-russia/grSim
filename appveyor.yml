@@ -32,10 +32,11 @@ build_script:
   - mingw%bit% ../configure --enable-double-precision
   - mingw%bit% make
   - mingw%bit% make install
+  - set PATH=%MSYS_DIR%\usr\bin
   - cd ..
-  - set PATH=%MSYS_DIR%\mingw%bit%\bin;%QT_MinGW_DIR%\bin
   - ls
   - cd vartypes_dir
+  - set PATH=%MSYS_DIR%\mingw%bit%\bin;%QT_MinGW_DIR%\bin
   - mkdir build-cmake && cd build-cmake
   - cmake -G "MinGW Makefiles" ..
   - cmake --build .
