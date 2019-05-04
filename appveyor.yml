@@ -27,7 +27,8 @@ init:
 build_script:
   - cd ode
   - mkdir build-cmake && cd build-cmake
-  - sh ../configure --enable-double-precision
+  - set PATH=%MSYS_DIR%
+  - mingw%bit% ../configure --enable-double-precision
   - make
   - make install
   - cd ..
