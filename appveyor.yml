@@ -25,6 +25,7 @@ init:
   - pacman --noconfirm -Sy make
   
 build_script:
+  - ls
   - cd ode
   - mkdir build-cmake && cd build-cmake
   - set PATH=%MSYS_DIR%
@@ -33,6 +34,7 @@ build_script:
   - mingw%bit% make install
   - cd ..
   - set PATH=%MSYS_DIR%\mingw%bit%\bin;%QT_MinGW_DIR%\bin
+  - ls
   - cd vartypes_dir
   - mkdir build-cmake && cd build-cmake
   - cmake -G "MinGW Makefiles" ..
