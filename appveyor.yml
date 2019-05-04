@@ -43,7 +43,9 @@ build_script:
   - mkdir build-cmake && cd build-cmake
   - cmake -G "MinGW Makefiles" ..
   - cmake --build .
-  - make install
+  - set PATH=%MSYS_DIR%
+  - mingw%bit% make install
+  - set PATH=%MSYS_DIR%\usr\bin
   - cd ..
   - mkdir C:\build_mingw_%platform%
   - cd C:\build_mingw_%platform%
