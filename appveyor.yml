@@ -29,8 +29,8 @@ build_script:
   - mkdir build-cmake && cd build-cmake
   - set PATH=%MSYS_DIR%
   - mingw%bit% ../configure --enable-double-precision
-  - make
-  - make install
+  - mingw%bit% make
+  - mingw%bit% make install
   - cd ..
   - set PATH=%MSYS_DIR%\mingw%bit%\bin;%QT_MinGW_DIR%\bin
   - cd vartypes_dir
