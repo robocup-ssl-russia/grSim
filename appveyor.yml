@@ -34,7 +34,7 @@ build_script:
   - mingw%bit% make install
   - set PATH=%MSYS_DIR%\usr\bin
   - cd ..
-  - ls
+  - cd ..
   - cd vartypes_dir
   - set PATH=%MSYS_DIR%\mingw%bit%\bin;%QT_MinGW_DIR%\bin
   - mkdir build-cmake && cd build-cmake
