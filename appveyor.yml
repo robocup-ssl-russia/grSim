@@ -45,9 +45,9 @@ build_script:
   - cmake --build .
   - set PATH=%MSYS_DIR%
   - mingw%bit% make install
-  - set PATH=%MSYS_DIR%\usr\bin
+  - set PATH=%MSYS_DIR%\mingw%bit%\bin;%QT_MinGW_DIR%\bin
   - cd ..
   - mkdir C:\build_mingw_%platform%
   - cd C:\build_mingw_%platform%
-  - cmake.exe -G "MinGW Makefiles" C:\grSim
-  - cmake.exe --build . -j 4
+  - cmake -G "MinGW Makefiles" C:\grSim
+  - cmake --build . -j 4
