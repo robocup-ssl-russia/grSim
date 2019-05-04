@@ -18,6 +18,9 @@ environment:
 init:
   - hg clone https://bitbucket.org/odedevs/ode ode
   - git clone https://github.com/DmiitriyJarosh/vartypes.git vartypes_dir
+  - cd vartypes_dir
+  - git checkout qt5
+  - cd ..
   - set PATH=%MSYS_DIR%\usr\bin
   - pacman --noconfirm -Su mingw%bit%/mingw-w64-%platform_name%-protobuf
   - pacman --noconfirm -Su mingw%bit%/mingw-w64-%platform_name%-cmake
