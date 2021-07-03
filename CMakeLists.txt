@@ -1,5 +1,17 @@
 cmake_minimum_required(VERSION 2.8)
 
+set(USE_QT5 1)
+if(USE_QT5)
+    if(POLICY CMP0020)
+        cmake_policy(SET CMP0020 NEW) # remove if CMake >= 2.8.11 required
+    endif()
+    if(POLICY CMP0043) # compatibility with CMake 3.0.1
+        cmake_policy(SET CMP0043 OLD)
+    endif()
+    if(POLICY CMP0071) # compatibility with CMake 3.10.0
+        cmake_policy(SET CMP0071 OLD)
+    endif()
+endif()
 
 ## Project branding, version and package mantainer
 project(grSim)
@@ -55,10 +67,31 @@ list(APPEND libs ${OPENGL_LIBRARIES})
 #include_directories(${GLUT_INCLUDE_DIR})
 
 # Qt
-set(QT_USE_QTNETWORK true)
-set(QT_USE_QTOPENGL true)
-find_package(Qt4 REQUIRED)
-include(${QT_USE_FILE})
+if (USE_QT5)
+    add_definitions(-D QT5)
+    set(CMAKE_INCLUDE_CURRENT_DIR ON)
+    set(CMAKE_AUTOMOC ON)
+    find_package(Qt5Core REQUIRED)
+    find_package(Qt5Widgets REQUIRED)
+    find_package(Qt5OpenGL REQUIRED)
+    find_package(Qt5Network REQUIRED)
+    set(QT_LIBRARIES "")
+    macro(qt4_wrap_cpp VARNAME)
+        set(${VARNAME} "")
+    endmacro()
+    # wrap functions
+    macro(qt4_wrap_ui)
+        qt5_wrap_ui(${ARGN})
+    endmacro()
+    macro(qt4_add_resources)
+        qt5_add_resources(${ARGN})
+    endmacro()
+else()
+    set(QT_USE_QTNETWORK true)
+    set(QT_USE_QTOPENGL true)
+    find_package(Qt4 REQUIRED)
+    include(${QT_USE_FILE})
+endif()
 list(APPEND libs ${QT_LIBRARIES})
 
 # ODE
@@ -191,7 +224,11 @@ if(APPLE)
 elseif(WIN32)
     set(app ${CMAKE_PROJECT_NAME})
     add_executable(${app} WIN32 ${srcs})
-    target_link_libraries(${app} ${libs})
+    if(USE_QT5)
+        target_link_libraries(${app} ${libs} Qt5::Core Qt5::Widgets Qt5::Network Qt5::OpenGL)
+    else()
+        target_link_libraries(${app} ${libs})
+    endif()
     install(TARGETS ${app} DESTINATION bin)
     install(DIRECTORY config DESTINATION .)
     install(DIRECTORY bin DESTINATION .
@@ -200,6 +237,9 @@ elseif(WIN32)
 else()
     set(app ${CMAKE_PROJECT_NAME_LOWER})
     add_executable(${app} ${srcs})
+    if(USE_QT5)
+        qt5_use_modules(${app} Widgets Network Core OpenGL)
+    endif()
     target_link_libraries(${app} ${libs})
     install(TARGETS ${app} DESTINATION bin)
     install(DIRECTORY config DESTINATION share/${app})
@@ -245,5 +285,55 @@ else()
     set(CPACK_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME_LOWER}_${CPACK_PACKAGE_VERSION}_${ARCH}")
 endif()
 include(CPack)
+
+set(COPY_ENABLE_FLAG 0)
+set(CXX_BIT 64)
+if(WIN32)
+    string(REPLACE "/g++.exe" "" RES ${CMAKE_CXX_COMPILER})
+
+    if(COPY_ENABLE_FLAG)
+        set(DLL_LIB_LIST ${RES}/zlib1.dll
+                ${RES}/libbz2-1.dll
+                ${RES}/libfreetype-6.dll
+                ${RES}/libglib-2.0-0.dll
+                ${RES}/libgraphite2.dll
+                ${RES}/libharfbuzz-0.dll
+                ${RES}/libiconv-2.dll
+                ${RES}/libicudt61.dll
+                ${RES}/libicuin61.dll
+                ${RES}/libicuuc61.dll
+                ${RES}/libintl-8.dll
+                ${RES}/libpcre-1.dll
+                ${RES}/libpcre2-16-0.dll
+                ${RES}/libpng16-16.dll
+                ${RES}/libprotobuf.dll
+                ${RES}/libstdc++-6.dll
+                ${VARTYPES_LIBRARIES}
+                ${RES}/libwinpthread-1.dll)
+        set(QT5_DEBUG_DLL ${RES}/Qt5Cored.dll
+                ${RES}/Qt5Guid.dll
+                ${RES}/Qt5Networkd.dll
+                ${RES}/Qt5OpenGLd.dll
+                ${RES}/Qt5Widgetsd.dll)
+        set(QT5_RELEASE_DLL ${RES}/Qt5Core.dll
+                ${RES}/Qt5Gui.dll
+                ${RES}/Qt5OpenGL.dll
+                ${RES}/Qt5Network.dll
+                ${RES}/Qt5Widgets.dll)
+        if(CMAKE_BUILD_TYPE STREQUAL Debug)
+            list(APPEND DLL_LIB_LIST ${QT5_DEBUG_DLL})
+        endif()
+        if (CXX_BIT STREQUAL 64)
+            list(APPEND DLL_LIB_LIST ${RES}/libgcc_s_seh-1.dll)
+        else()
+            list(APPEND DLL_LIB_LIST ${RES}/libgcc_s_dw2-1.dll)
+        endif()
+        if(CMAKE_BUILD_TYPE STREQUAL Release)
+            list(APPEND DLL_LIB_LIST ${QT5_RELEASE_DLL})
+        endif()
+
+        file(COPY ${DLL_LIB_LIST} DESTINATION ../bin)
+    endif()
+endif()
 
 

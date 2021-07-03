@@ -295,6 +295,10 @@ void MainWindow::showHideSimulator(bool v)
 
 void MainWindow::changeCurrentRobot()
 {
+    if (robotwidget->robotCombo->currentIndex() >= glwidget->ssl->cfg->Robots_Count()) {
+        robotwidget->robotCombo->setCurrentIndex(glwidget->Current_robot);
+        return;
+    }
     glwidget->Current_robot=robotwidget->robotCombo->currentIndex();    
     robotwidget->setPicture(glwidget->ssl->robots[glwidget->ssl->robotIndex(glwidget->Current_robot,glwidget->Current_team)]->img);
     robotwidget->id = robotIndex(glwidget->Current_robot, glwidget->Current_team);

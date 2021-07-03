@@ -1,0 +1,53 @@
+clone_folder: C:\grSim
+shallow_clone: true
+
+environment:
+  global:
+    MSYS_DIR: C:\msys64
+  matrix:
+    - platform: x86
+      platform_name: i686
+      bit: 32
+      QT_MinGW_DIR: C:\Qt\5.11\mingw53_32
+    - platform: x64
+      platform_name: x86_64
+      bit: 64 
+      QT_MinGW_DIR: C:\Qt\5.12\mingw73_64
+        
+
+init:
+  - hg clone https://bitbucket.org/odedevs/ode ode
+  - git clone https://github.com/DmiitriyJarosh/vartypes.git vartypes_dir
+  - cd vartypes_dir
+  - git checkout qt5
+  - cd ..
+  - set PATH=%MSYS_DIR%\usr\bin
+  - pacman --noconfirm -Su mingw%bit%/mingw-w64-%platform_name%-protobuf
+  - pacman --noconfirm -Su mingw%bit%/mingw-w64-%platform_name%-cmake
+  - pacman --noconfirm -Su mingw-w64-%platform_name%-boost
+  - pacman --noconfirm -Sy make
+  
+build_script:
+  - ls
+  - cd ode
+  - mkdir build-cmake && cd build-cmake
+  - set PATH=%MSYS_DIR%
+  - mingw%bit% ../configure --enable-double-precision
+  - mingw%bit% make
+  - mingw%bit% make install
+  - set PATH=%MSYS_DIR%\usr\bin
+  - cd ..
+  - cd ..
+  - cd vartypes_dir
+  - set PATH=%MSYS_DIR%\mingw%bit%\bin;%QT_MinGW_DIR%\bin
+  - mkdir build-cmake && cd build-cmake
+  - cmake -G "MinGW Makefiles" ..
+  - cmake --build .
+  - set PATH=%MSYS_DIR%
+  - mingw%bit% make install
+  - set PATH=%MSYS_DIR%
+  - cd ..
+  - mkdir C:\build_mingw_%platform%
+  - cd C:\build_mingw_%platform%
+  - mingw%bit% cmake -G "MinGW Makefiles" C:\grSim
+  - mingw%bit% cmake --build . -j 4

@@ -18,7 +18,9 @@ Copyright (C) 2011, Parsian Robotic Center (eew.aut.ac.ir/~parsian/grsim)
 
 #ifndef CONFIGWIDGET_H
 #define CONFIGWIDGET_H
-
+#ifdef __WIN32__
+    #define WIN32_LEAN_AND_MEAN
+#endif
 #include <QWidget>
 #include <QDockWidget>
 #include <QtGui>
